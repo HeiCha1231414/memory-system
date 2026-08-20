@@ -67,6 +67,17 @@ For setups with more than one agent:
 - Never edit the shared file in place.
 - Keep deprecated mirror paths documented so old copies don't get mistaken for current.
 
+## Multi-agent cross-checking (optional)
+
+For setups with more than one agent sharing memory, mutual checking closes the blind spots a single agent can't see (e.g. one agent's backup script stops covering a path and nobody notices for days).
+
+- **Scheduled mutual checks**: each agent periodically (e.g. every 4 hours, or at wake) verifies the other's mirrors — not just its own.
+- **What to check**: checksums (MD5) of every shared file across **every** mirror location: knowledge base, shared facts, heartbeat file, today's logs.
+- **Fix drift, don't just report it**: if a mirror is stale, sync it immediately with a copy command (never edit in place), then confirm checksums match.
+- **Receipt loop**: after a check, reply with a confirmation of what was verified and what was fixed. Both sides keep the loop closed so nothing silently drops.
+- **Single source of truth**: one authoritative copy per file; every other copy is a mirror derived from it. When updating, write to a local copy first, then copy it to all mirrors.
+- **Deprecated paths**: document old mirror paths so stale copies don't get mistaken for current ones.
+
 ## Knowledge base (optional)
 
 - Topic-indexed digests, each entry tagged with its source log.
